@@ -1,24 +1,45 @@
-from .models import Book
-from .serializers import BookSerilizer
+from .models import Book,Author,Car,Product
+from .serializers import BookSerilizer,AuthorSerializer,CarSerializer,ProductSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-
-
-@api_view(['GET','POST'])
-def books(request):
-    if request.method=='GET':
-        books=Book.objects.all()
-        serializer=BookSerilizer(books,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
-
+from .filter import price_filter
+from .search import search_by_title
+from .pagination import CastomPagination
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
  
-    if request.method=='POST':
-        serilizer=BookSerilizer(data=request.data)
-        if serilizer.is_valid():
-            serilizer.save()
-            return Response(serilizer.data,status=status.HTTP_201_CREATED)
-        return Response(serilizer.errors,status=status.HTTP_400_BAD_REQUEST)
+class Cars(ListCreateAPIView):
+    queryset=Car.objects.all()
+    serializer_class=CarSerializer
+
+class CarsById(RetrieveUpdateDestroyAPIView):
+    queryset=Car.objects.all()
+    serializer_class=CarSerializer
+
+class Products(ModelViewSet):
+    queryset=Product.objects.all()
+    serializer_class=ProductSerializer
+
+
+
+class BookListCreateAPIView(APIView):
+    def get(self, request):
+        books = Book.objects.all()
+        serializer = BookSerilizer(books, many=True)
+        return Response(serializer.data)
+    @swagger_auto_schema(
+        request_body=BookSerilizer,
+        responses={201: BookSerilizer}
+    )
+    def post(self, request):
+        serializer = BookSerilizer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
 @api_view(['GET','DELETE','PUT'])
@@ -47,3 +68,19 @@ def book(request,id):
 
 
  
+
+
+class AuthorListCreateView(GenericAPIView):
+    queryset=Author.objects.all()
+    serializer_class=AuthorSerializer
+
+    def get(self, request):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
