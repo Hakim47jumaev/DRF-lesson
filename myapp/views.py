@@ -104,3 +104,29 @@ class AuthorListCreateView(GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+
+from rest_framework import generics
+from .models import Course
+from .serializers import CourseSerializer
+from .permissions import *
+class CourseListView(generics.ListAPIView):
+    queryset=Course.objects.all()
+    serializer_class=CourseSerializer
+    permission_classes=[AllowAny]
+
+    def get_queryset(self):
+        queryset=Course.objects.filter(is_deleted=False)
+        return queryset
+    
+
+class CourseDelete(generics.DestroyAPIView):
+    queryset=Course.objects.all()
+    serializer_class=CourseSerializer
+    permission_classes=[IsAdmin]
+
+class CourseCreate(generics.CreateAPIView):
+    queryset=Course.objects.all()
+    serializer_class=CourseSerializer
+    permission_classes=[IsMentor]
+

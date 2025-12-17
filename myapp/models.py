@@ -35,3 +35,32 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+
+
+
+class Course(models.Model):
+    name=models.CharField( max_length=50)
+    description=models.CharField( max_length=50)
+    stack=models.CharField( max_length=50)
+    created_at=models.DateTimeField(auto_now_add=True)
+    is_deleted=models.BooleanField(default=False)
+    start_at=models.DateTimeField(auto_now=False, auto_now_add=False)
+
+
+    def save(self, *args, **kwargs):
+        self.stack=self.stack.upper()
+
+        return super().save(*args, **kwargs)
+    
+    def delete(self,*args, **kwargs):
+        self.is_deleted=True
+        self.save(*args, **kwargs)
+    
+
+
+
+    def __str__(self):
+        return self.name
+

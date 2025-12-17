@@ -58,6 +58,22 @@ class BookSerilizer(serializers.ModelSerializer):
         return rep
 
 
-        
+from django.utils import timezone
+
+class CourseSerializer(serializers.ModelSerializer):
+    is_active=serializers.SerializerMethodField()
+
+    class Meta:
+        model=Course
+        fields=['name','description','stack','created_at','is_active','start_at']
+        read_only_fields=['created_at','is_active']
+
+
+    def get_is_active(self,obj):
+        return obj.start_at<timezone.now()
+
+
+
+
 
 

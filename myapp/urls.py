@@ -12,5 +12,8 @@ urlpatterns = [
     path('authors/',AuthorListCreateView.as_view()),
     path('cars/',Cars.as_view()),
     path('cars/<int:id>',CarsById.as_view()),
-    path('rout',include(router.urls))
+    path('rout',include(router.urls)),
+    path('courses/',CourseListView.as_view()),
+    path('courses/create/',CourseCreate.as_view()),
+    path('courses/<int:pk>',CourseDelete.as_view()),
 ]

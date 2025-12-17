@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Book,Author
+from .models import Book,Author,Course
 
 
-admin.site.register([Book,Author])
+admin.site.register([Book,Author,Course])
 

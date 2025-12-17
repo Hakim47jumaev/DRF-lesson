@@ -14,11 +14,12 @@ class Register(APIView):
     def post(self,request):
         username=request.data.get("username")
         password=request.data.get("password")
+        role=request.data.get('role')
 
         if User.objects.filter(username=username).exists():
             return Response({"error":"this user already exists"},status=status.HTTP_400_BAD_REQUEST)
         
-        User.objects.create_user(username=username,password=password)
+        User.objects.create_user(username=username,password=password,role=role)
         return Response({"message":"registered"},status=status.HTTP_201_CREATED)
 
 
