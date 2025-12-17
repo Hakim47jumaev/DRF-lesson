@@ -10,7 +10,27 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
- 
+from rest_framework.permissions import AllowAny
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Cars(ListCreateAPIView):
     queryset=Car.objects.all()
     serializer_class=CarSerializer
