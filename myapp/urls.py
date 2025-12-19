@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 router=DefaultRouter()
 
-router.register('products',Products)
+router.register('products',ProductViewSet)
 
 urlpatterns = [
     path('books/',BookListCreateAPIView.as_view()),

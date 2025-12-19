@@ -12,10 +12,7 @@ class CarSerializer(serializers.ModelSerializer):
         model=Car
         fields='__all__'
 
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Product
-        fields='__all__'
+ 
 
 
 class BookSerilizer(serializers.ModelSerializer):
@@ -73,6 +70,10 @@ class CourseSerializer(serializers.ModelSerializer):
         return obj.start_at<timezone.now()
 
 
+class ProductsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Products
+        fields = "__all__"
 
 
 

@@ -1,5 +1,5 @@
-from .models import Book,Author,Car,Product
-from .serializers import BookSerilizer,AuthorSerializer,CarSerializer,ProductSerializer
+from .models import Book,Author,Car,Products
+from .serializers import BookSerilizer,AuthorSerializer,CarSerializer,ProductsSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -29,19 +29,23 @@ from rest_framework.permissions import AllowAny
 
 
 
-
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 class Cars(ListCreateAPIView):
     queryset=Car.objects.all()
     serializer_class=CarSerializer
 
+    filter_backends=[DjangoFilterBackend,SearchFilter]
+
+    filterset_fields=['model','brend']
+    search_fields=['model','brend']
+
 class CarsById(RetrieveUpdateDestroyAPIView):
     queryset=Car.objects.all()
     serializer_class=CarSerializer
 
-class Products(ModelViewSet):
-    queryset=Product.objects.all()
-    serializer_class=ProductSerializer
+ 
 
 
 
@@ -130,3 +134,20 @@ class CourseCreate(generics.CreateAPIView):
     serializer_class=CourseSerializer
     permission_classes=[IsMentor]
 
+
+
+
+from django.core.cache import cache
+from rest_framework.response import Response
+ 
+from .serializers import ProductsSerializer
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
+@method_decorator(cache_page(60), name='list')      
+@method_decorator(cache_page(60), name='retrieve')
+class ProductViewSet(ModelViewSet):
+    queryset = Products.objects.all()
+    serializer_class = ProductsSerializer
+
+    

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'myapp',
     'rest_framework',
     'drf_yasg',
-    'accounts'
+    'accounts',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -88,6 +89,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',  # Filtering backend
+        'rest_framework.filters.SearchFilter',                # Search backend
+    ]
 }
 
 from datetime import timedelta
@@ -107,6 +112,12 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
